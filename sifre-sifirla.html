@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GezPlan — Şifre Sıfırla</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #2E7D5B, #43A57C);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 24px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+    .logo { text-align: center; font-size: 40px; margin-bottom: 8px; }
+    h1 { text-align: center; font-size: 22px; color: #1A1D21; margin-bottom: 6px; }
+    .sub { text-align: center; color: #6B7280; font-size: 14px; margin-bottom: 24px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: #1A1D21; margin-bottom: 6px; }
+    .input-wrap { position: relative; margin-bottom: 16px; }
+    input {
+      width: 100%;
+      padding: 14px;
+      padding-right: 44px;
+      border: 1px solid #ECEEF1;
+      border-radius: 12px;
+      font-size: 15px;
+      background: #F7F8FA;
+    }
+    input:focus { outline: none; border-color: #2E7D5B; background: #fff; }
+    .eye {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px;
+    }
+    button.submit {
+      width: 100%;
+      padding: 15px;
+      background: #2E7D5B;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    button.submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .msg { text-align: center; font-size: 14px; margin-top: 16px; padding: 12px; border-radius: 10px; display: none; }
+    .msg.error { background: #FEE2E2; color: #DC2626; display: block; }
+    .msg.ok { background: #DCFCE7; color: #16A34A; display: block; }
+    .hint { font-size: 12px; color: #9CA3AF; margin-top: 4px; }
+    .lang { text-align: center; margin-top: 20px; }
+    .lang a { color: #6B7280; font-size: 12px; text-decoration: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🧭</div>
+    <h1 id="title">Yeni Şifre Belirle</h1>
+    <p class="sub" id="subtitle">GezPlan hesabın için yeni bir şifre gir.</p>
+
+    <div id="form">
+      <label id="labelPass">Yeni şifre</label>
+      <div class="input-wrap">
+        <input type="password" id="password" placeholder="En az 6 karakter" />
+        <button class="eye" onclick="togglePass()" type="button" id="eyeBtn">👁️</button>
+      </div>
+      <p class="hint" id="hint">En az 6 karakter olmalı.</p>
+
+      <button class="submit" id="submitBtn" onclick="resetPassword()">Şifreyi Güncelle</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+
+    <div class="lang">
+      <a onclick="setLang('tr')">Türkçe</a> · <a onclick="setLang('en')">English</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://pwpzqjosxlprtoyxyfth.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_ylhz25yWalyO6yIsfZMhMg_mmAOrRCN";
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const T = {
+      tr: {
+        title: "Yeni Şifre Belirle", subtitle: "GezPlan hesabın için yeni bir şifre gir.",
+        labelPass: "Yeni şifre", placeholder: "En az 6 karakter", hint: "En az 6 karakter olmalı.",
+        submit: "Şifreyi Güncelle", updating: "Güncelleniyor...",
+        short: "Şifre en az 6 karakter olmalı.",
+        ok: "✓ Şifren güncellendi! Artık uygulamadan yeni şifrenle giriş yapabilirsin.",
+        expired: "Bu bağlantının süresi dolmuş veya geçersiz. Uygulamadan tekrar şifre sıfırlama iste.",
+        error: "Bir hata oluştu. Lütfen tekrar dene."
+      },
+      en: {
+        title: "Set New Password", subtitle: "Enter a new password for your GezPlan account.",
+        labelPass: "New password", placeholder: "At least 6 characters", hint: "Must be at least 6 characters.",
+        submit: "Update Password", updating: "Updating...",
+        short: "Password must be at least 6 characters.",
+        ok: "✓ Your password has been updated! You can now sign in with your new password.",
+        expired: "This link has expired or is invalid. Please request a new password reset from the app.",
+        error: "An error occurred. Please try again."
+      }
+    };
+
+    let lang = (navigator.language || "tr").startsWith("en") ? "en" : "tr";
+
+    function setLang(l) {
+      lang = l;
+      const t = T[l];
+      document.getElementById("title").textContent = t.title;
+      document.getElementById("subtitle").textContent = t.subtitle;
+      document.getElementById("labelPass").textContent = t.labelPass;
+      document.getElementById("password").placeholder = t.placeholder;
+      document.getElementById("hint").textContent = t.hint;
+      document.getElementById("submitBtn").textContent = t.submit;
+      document.documentElement.lang = l;
+    }
+    setLang(lang);
+
+    function togglePass() {
+      const inp = document.getElementById("password");
+      const btn = document.getElementById("eyeBtn");
+      if (inp.type === "password") { inp.type = "text"; btn.textContent = "🙈"; }
+      else { inp.type = "password"; btn.textContent = "👁️"; }
+    }
+
+    function showMsg(text, type) {
+      const m = document.getElementById("msg");
+      m.textContent = text;
+      m.className = "msg " + type;
+    }
+
+    // Sayfa açılınca: Supabase, URL'deki token ile oturumu kurar (recovery flow)
+    let sessionReady = false;
+    sb.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY" || session) sessionReady = true;
+    });
+
+    async function resetPassword() {
+      const t = T[lang];
+      const pass = document.getElementById("password").value;
+      if (pass.length < 6) { showMsg(t.short, "error"); return; }
+
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.textContent = t.updating;
+
+      const { error } = await sb.auth.updateUser({ password: pass });
+
+      btn.disabled = false;
+      btn.textContent = t.submit;
+
+      if (error) {
+        if (error.message && error.message.toLowerCase().includes("session")) {
+          showMsg(t.expired, "error");
+        } else {
+          showMsg(t.error + " (" + error.message + ")", "error");
+        }
+        return;
+      }
+      document.getElementById("form").style.display = "none";
+      showMsg(t.ok, "ok");
+    }
+  </script>
+</body>
+</html>
