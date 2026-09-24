@@ -1,112 +1,272 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>GezPlan — Hesap Silme</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GezPlan Hesap Silme</title>
+<meta name="description" content="GezPlan hesabını ve verilerini silme adımları, hangi verilerin silindiği ve e-posta ile silme talebi. How to delete your GezPlan account and data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-       background:#F7F8FA;color:#1A1D21;line-height:1.7;padding:24px}
-  .wrap{max-width:760px;margin:0 auto;background:#fff;border-radius:16px;
-        padding:36px 30px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
-  .logo{text-align:center;font-size:40px;margin-bottom:6px}
-  h1{text-align:center;font-size:26px;margin-bottom:6px;color:#2E7D5B}
-  .sub{text-align:center;color:#6B7280;font-size:14px;margin-bottom:28px}
-  h2{font-size:18px;margin:26px 0 10px;color:#1A1D21}
-  p,li{font-size:15px;color:#374151}
-  ol,ul{margin:10px 0 10px 22px}
-  li{margin-bottom:7px}
-  .box{background:#E6F4EE;border-left:4px solid #2E7D5B;padding:14px 16px;
-       border-radius:8px;margin:18px 0}
-  .warn{background:#FEF3C7;border-left:4px solid #D97706}
-  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
-  th,td{text-align:left;padding:10px;border-bottom:1px solid #ECEEF1}
-  th{background:#F7F8FA;font-weight:700}
-  a{color:#2E7D5B}
-  .foot{margin-top:30px;padding-top:18px;border-top:1px solid #ECEEF1;
-        text-align:center;color:#9CA3AF;font-size:13px}
-  .en{margin-top:34px;padding-top:26px;border-top:2px dashed #ECEEF1}
+  :root {
+    --bg: #F3F6F2;
+    --surface: #FFFFFF;
+    --ink: #132019;
+    --muted: #56675D;
+    --rule: #D8E2DA;
+    --brand: #2E7D5B;
+    --brand-soft: #E3F0E8;
+    --warn-bg: #FDF1DE;
+    --warn-edge: #D9822B;
+    --warn-ink: #5C3B12;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #0E1411;
+      --surface: #161E19;
+      --ink: #E4ECE6;
+      --muted: #9CAFA3;
+      --rule: #27342C;
+      --brand: #43A57C;
+      --brand-soft: #1A2A21;
+      --warn-bg: #2A2114;
+      --warn-edge: #D9822B;
+      --warn-ink: #F1D9B5;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0E1411;
+    --surface: #161E19;
+    --ink: #E4ECE6;
+    --muted: #9CAFA3;
+    --rule: #27342C;
+    --brand: #43A57C;
+    --brand-soft: #1A2A21;
+    --warn-bg: #2A2114;
+    --warn-edge: #D9822B;
+    --warn-ink: #F1D9B5;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 1.02rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand); }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+
+  .page {
+    max-width: 44rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 5vw, 2rem);
+    padding-block: 1.5rem 3rem;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .brand-glyph {
+    width: 1.8rem; height: 1.8rem; border-radius: 0.55rem;
+    background: var(--brand); color: #FFFFFF;
+    display: grid; place-items: center; font-size: 1rem;
+  }
+  .lang { display: flex; gap: 0.3rem; }
+  .lang a {
+    font-weight: 600; font-size: 0.9rem; text-decoration: none;
+    color: var(--muted); padding: 0.3rem 0.7rem; border-radius: 999px;
+    border: 1.5px solid var(--rule); background: var(--surface);
+  }
+  .lang a:hover { color: var(--ink); border-color: var(--brand); }
+
+  section + section { margin-top: 3.5rem; padding-top: 3rem; border-top: 1px solid var(--rule); }
+
+  h1, h2 { font-family: var(--display); letter-spacing: -0.03em; text-wrap: balance; }
+  h1 { font-weight: 800; font-size: clamp(2rem, 1.5rem + 2.5vw, 2.8rem); line-height: 1.05; margin: 0 0 0.75rem; }
+  h2 { font-weight: 700; font-size: 1.35rem; line-height: 1.2; margin: 2.25rem 0 0.75rem; }
+  p { margin: 0 0 1rem; }
+  .lede { color: var(--muted); font-size: 1.1rem; }
+
+  .steps {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 0.6rem; counter-reset: step;
+  }
+  .steps li {
+    counter-increment: step;
+    display: grid; grid-template-columns: 2rem 1fr; gap: 0.75rem; align-items: start;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 1rem;
+    padding: 0.85rem 1rem;
+  }
+  .steps li::before {
+    content: counter(step);
+    width: 2rem; height: 2rem; border-radius: 50%;
+    background: var(--brand-soft); color: var(--brand);
+    display: grid; place-items: center;
+    font-family: var(--display); font-weight: 800;
+  }
+
+  .ok {
+    background: var(--brand-soft); border-radius: 1rem;
+    padding: 0.9rem 1.1rem; margin-top: 1rem;
+  }
+
+  .warn {
+    background: var(--warn-bg); color: var(--warn-ink);
+    border-left: 4px solid var(--warn-edge); border-radius: 0.75rem;
+    padding: 1rem 1.1rem; margin-top: 1.25rem;
+  }
+  .warn strong { color: inherit; }
+  .warn ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+  .warn li { margin-bottom: 0.3rem; }
+
+  .mail {
+    display: inline-block;
+    font-weight: 700; font-size: 1.05rem;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 0.6rem;
+    padding: 0.35rem 0.7rem; margin: 0.25rem 0;
+    user-select: all; word-break: break-all;
+  }
+
+  .data { display: grid; border: 1px solid var(--rule); border-radius: 1rem; overflow: hidden; background: var(--surface); }
+  .data div {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    padding: 0.8rem 1rem; border-top: 1px solid var(--rule);
+  }
+  .data div:first-child { border-top: 0; }
+  .data dt { font-weight: 600; margin: 0; }
+  .data dd { margin: 0; color: var(--muted); }
+  .data .gone { color: var(--ink); }
+
+  .foot { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.93rem; }
+
+  @media (max-width: 30rem) {
+    .data div { grid-template-columns: 1fr; gap: 0.15rem; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="logo">🧭</div>
-  <h1>Hesap Silme</h1>
-  <p class="sub">GezPlan — Grup Gezi Planlama</p>
+<div class="page">
 
-  <p>GezPlan hesabınızı ve hesabınızla ilişkili tüm verileri istediğiniz zaman kalıcı olarak silebilirsiniz.</p>
+  <header class="top">
+    <a class="brand" href="https://conquu.github.io/"><span class="brand-glyph" aria-hidden="true">🧭</span>GezPlan</a>
+    <nav class="lang" aria-label="Dil / Language">
+      <a href="#tr" lang="tr">Türkçe</a>
+      <a href="#en" lang="en">English</a>
+    </nav>
+  </header>
 
-  <h2>Uygulama üzerinden silme (önerilen)</h2>
-  <ol>
-    <li>GezPlan uygulamasını açın ve hesabınıza giriş yapın.</li>
-    <li>Sol üstteki <strong>☰ menü</strong> simgesine dokunun.</li>
-    <li><strong>HESAP</strong> bölümündeki <strong>🗑️ Hesabımı sil</strong> seçeneğine dokunun.</li>
-    <li>Çıkan onay penceresinde işlemi onaylayın.</li>
-  </ol>
+  <section id="tr" lang="tr">
+    <h1>Hesap silme</h1>
+    <p class="lede">GezPlan hesabını ve hesabınla ilişkili verileri istediğin zaman kalıcı olarak silebilirsin.</p>
 
-  <div class="box">
-    Hesabınız ve verileriniz onayın ardından <strong>anında ve kalıcı olarak</strong> silinir.
-    Bu işlem geri alınamaz.
-  </div>
-
-  <h2>E-posta ile silme talebi</h2>
-  <p>Uygulamaya erişemiyorsanız, hesabınıza kayıtlı e-posta adresinden
-     <a href="mailto:kampprojesi@gmail.com">kampprojesi@gmail.com</a> adresine
-     "Hesap silme talebi" konulu bir e-posta gönderin. Talebiniz en geç
-     <strong>30 gün</strong> içinde işleme alınır.</p>
-
-  <h2>Silinen ve saklanan veriler</h2>
-  <table>
-    <tr><th>Veri türü</th><th>Durum</th></tr>
-    <tr><td>Hesap bilgileri (e-posta, görünen ad)</td><td>Silinir</td></tr>
-    <tr><td>Oluşturduğunuz geziler</td><td>Silinir</td></tr>
-    <tr><td>Malzeme listeleri ve kişisel çanta</td><td>Silinir</td></tr>
-    <tr><td>Masraf kayıtlarınız</td><td>Silinir</td></tr>
-    <tr><td>Sohbet mesajlarınız</td><td>Silinir</td></tr>
-    <tr><td>Notlarınız ve oylamalarınız</td><td>Silinir</td></tr>
-    <tr><td>Yüklediğiniz fotoğraflar</td><td>Silinir</td></tr>
-    <tr><td>Gönderdiğiniz geri bildirimler</td><td>Silinir</td></tr>
-  </table>
-
-  <div class="box warn">
-    <strong>Not:</strong> Bir gezide sizden başka üyeler varsa, o gezi diğer üyeler için
-    devam eder; yalnızca size ait kayıtlar kaldırılır. Siz gezinin tek üyesiyseniz gezi
-    tamamen silinir.
-  </div>
-
-  <p>Silme işleminden sonra hiçbir veri saklanmaz. Yedeklerden tamamen kaldırılma
-     süresi teknik olarak en fazla <strong>30 gün</strong> sürebilir.</p>
-
-  <div class="en">
-    <h1>Account Deletion</h1>
-    <p class="sub">GezPlan — Group Trip Planner</p>
-
-    <h2>Delete from the app (recommended)</h2>
-    <ol>
-      <li>Open GezPlan and sign in to your account.</li>
-      <li>Tap the <strong>☰ menu</strong> icon at the top left.</li>
-      <li>Under <strong>ACCOUNT</strong>, tap <strong>🗑️ Delete my account</strong>.</li>
-      <li>Confirm in the dialog that appears.</li>
+    <h2>Uygulamadan silme</h2>
+    <ol class="steps">
+      <li><span>GezPlan uygulamasını aç ve hesabına giriş yap.</span></li>
+      <li><span>Alttaki <strong>👤 Profilim</strong> sekmesine dokun.</span></li>
+      <li><span><strong>Hesap Bilgileri</strong> satırına dokunarak aç.</span></li>
+      <li><span><strong>🗑️ Hesabımı sil</strong> seçeneğine dokun ve onay penceresinde işlemi onayla.</span></li>
     </ol>
+    <p class="ok">Onayladıktan sonra hesabın ve verilerin hemen ve kalıcı olarak silinir. Bu işlem geri alınamaz.</p>
 
-    <h2>Request by email</h2>
-    <p>If you cannot access the app, send an email titled "Account deletion request"
-       from your registered address to
-       <a href="mailto:kampprojesi@gmail.com">kampprojesi@gmail.com</a>.
-       Requests are processed within <strong>30 days</strong>.</p>
+    <h2>E-posta ile silme talebi</h2>
+    <p>Uygulamayı artık kullanmıyorsan veya uygulamaya erişemiyorsan, hesabına kayıtlı e-posta adresinden aşağıdaki adrese <strong>"Hesap silme talebi"</strong> konulu bir e-posta gönder:</p>
+    <p><span class="mail">kampprojesi@gmail.com</span></p>
+    <p>Talebin en geç 30 gün içinde işleme alınır ve tamamlandığında sana e-posta ile bilgi verilir.</p>
 
-    <h2>What is deleted</h2>
-    <p>Account details (email, display name), trips you created, packing lists,
-       expense records, chat messages, notes, polls, uploaded photos and feedback
-       are permanently deleted. If a trip has other members, the trip continues for
-       them and only your records are removed. Nothing is retained afterwards;
-       full removal from backups may take up to <strong>30 days</strong>.</p>
-  </div>
+    <h2>Hangi veriler silinir</h2>
+    <dl class="data">
+      <div><dt>Hesap bilgilerin (e-posta, görünen ad)</dt><dd class="gone">Silinir</dd></div>
+      <div><dt>Kurduğun geziler</dt><dd class="gone">Gezi, bütün üyelerin o gezideki kayıtlarıyla birlikte silinir</dd></div>
+      <div><dt>Başkalarının gezilerine eklediğin masraflar ve ödeme kayıtları</dt><dd class="gone">Silinir</dd></div>
+      <div><dt>Mesajların, notların, oylamaların ve oyların</dt><dd class="gone">Silinir</dd></div>
+      <div><dt>Yüklediğin fotoğraflar</dt><dd class="gone">Silinir</dd></div>
+      <div><dt>Kişisel çanta listen</dt><dd class="gone">Silinir</dd></div>
+      <div><dt>Ortak listede üstlendiğin eşyalar</dt><dd>Eşya listede kalır, üstlenen kişi bilgisi kaldırılır</dd></div>
+      <div><dt>Gönderdiğin geri bildirimler</dt><dd class="gone">Silinir</dd></div>
+    </dl>
 
-  <div class="foot">
-    GezPlan · <a href="https://conquu.github.io/gezplan-privacy/">Gizlilik Politikası</a>
-  </div>
+    <div class="warn">
+      <strong>Grup gezileri için önemli:</strong>
+      <ul>
+        <li>Kurduğun bir gezide başka üyeler varsa, hesabını sildiğinde gezi onlar için de silinir. Silmeden önce üyelere haber vermeni öneririz.</li>
+        <li>Başkalarının gezilerine eklediğin masraflar silindiği için o gezilerdeki borç ve alacak hesabı değişir.</li>
+        <li>Başkalarının kurduğu geziler, onlar için devam eder. Sen yalnızca üye listesinden çıkarılırsın.</li>
+      </ul>
+    </div>
+
+    <p style="margin-top:1.25rem">Silme işleminden sonra verilerin saklanmaz. Sistem yedeklerinden tamamen kaldırılması en fazla 30 gün sürebilir.</p>
+  </section>
+
+  <section id="en" lang="en">
+    <h1>Account deletion</h1>
+    <p class="lede">You can permanently delete your GezPlan account and the data linked to it at any time.</p>
+
+    <h2>Delete in the app</h2>
+    <ol class="steps">
+      <li><span>Open GezPlan and sign in.</span></li>
+      <li><span>Tap the <strong>👤 My Profile</strong> tab at the bottom.</span></li>
+      <li><span>Tap <strong>Account</strong> to expand it.</span></li>
+      <li><span>Tap <strong>🗑️ Delete my account</strong> and confirm.</span></li>
+    </ol>
+    <p class="ok">After you confirm, your account and data are deleted immediately and permanently. This cannot be undone.</p>
+
+    <h2>Request deletion by email</h2>
+    <p>If you no longer use the app or can't access it, send an email with the subject <strong>"Account deletion request"</strong> from the email address registered to your account to:</p>
+    <p><span class="mail">kampprojesi@gmail.com</span></p>
+    <p>Your request is processed within 30 days, and you'll get an email when it's done.</p>
+
+    <h2>What gets deleted</h2>
+    <dl class="data">
+      <div><dt>Your account details (email, display name)</dt><dd class="gone">Deleted</dd></div>
+      <div><dt>Trips you created</dt><dd class="gone">The trip is deleted, including every member's records in it</dd></div>
+      <div><dt>Expenses and payment records you added to other people's trips</dt><dd class="gone">Deleted</dd></div>
+      <div><dt>Your messages, notes, polls and votes</dt><dd class="gone">Deleted</dd></div>
+      <div><dt>Photos you uploaded</dt><dd class="gone">Deleted</dd></div>
+      <div><dt>Your personal packing list</dt><dd class="gone">Deleted</dd></div>
+      <div><dt>Shared list items you claimed</dt><dd>The item stays on the list, your claim is removed</dd></div>
+      <div><dt>Feedback you sent</dt><dd class="gone">Deleted</dd></div>
+    </dl>
+
+    <div class="warn">
+      <strong>Important for group trips:</strong>
+      <ul>
+        <li>If a trip you created has other members, deleting your account deletes the trip for them too. We recommend telling them first.</li>
+        <li>Because expenses you added to other people's trips are deleted, the balances in those trips change.</li>
+        <li>Trips created by others continue for them. You are only removed from the member list.</li>
+      </ul>
+    </div>
+
+    <p style="margin-top:1.25rem">After deletion your data is not kept. Full removal from system backups can take up to 30 days.</p>
+  </section>
+
+  <footer class="foot">
+    GezPlan, ConquApp tarafından geliştirilmiştir. <a href="https://conquu.github.io/gezplan-privacy/">Gizlilik politikası / Privacy policy</a>
+  </footer>
+
 </div>
 </body>
 </html>
