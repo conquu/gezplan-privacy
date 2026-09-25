@@ -166,6 +166,25 @@
   @media (max-width: 30rem) {
     .data div { grid-template-columns: 1fr; gap: 0.15rem; }
   }
+
+  .docnav { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: -1rem 0 2rem; }
+  .docnav a {
+    font-weight: 600; font-size: 0.92rem; text-decoration: none;
+    color: var(--muted); padding: 0.4rem 0.85rem; border-radius: 999px;
+  }
+  .docnav a:hover { color: var(--ink); background: var(--brand-soft); }
+  .docnav a[aria-current="page"] { color: var(--brand); background: var(--brand-soft); }
+  .updated { color: var(--muted); font-size: 0.93rem; margin: -0.25rem 0 1.5rem; }
+  .prose ul { margin: 0 0 1rem; padding-left: 1.2rem; }
+  .prose li { margin-bottom: 0.45rem; }
+  .prose h2:first-of-type { margin-top: 1.75rem; }
+  .jump {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-weight: 600; text-decoration: none;
+    background: var(--brand-soft); color: var(--brand);
+    padding: 0.55rem 0.95rem; border-radius: 999px; margin-top: 0.25rem;
+  }
+  .jump:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -178,6 +197,11 @@
       <a href="#en" lang="en">English</a>
     </nav>
   </header>
+
+  <nav class="docnav" aria-label="GezPlan belgeleri">
+    <a href="index.html">Gizlilik politikası</a>
+    <a href="hesap-silme.html" aria-current="page">Hesap silme</a>
+  </nav>
 
   <section id="tr" lang="tr">
     <h1>Hesap silme</h1>
@@ -264,7 +288,7 @@
   </section>
 
   <footer class="foot">
-    GezPlan, ConquApp tarafından geliştirilmiştir. <a href="https://conquu.github.io/gezplan-privacy/">Gizlilik politikası / Privacy policy</a>
+    GezPlan, ConquApp tarafından geliştirilmiştir. <a href="index.html">Gizlilik politikası / Privacy policy</a>
   </footer>
 
 </div>
