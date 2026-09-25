@@ -185,25 +185,28 @@
     padding: 0.55rem 0.95rem; border-radius: 999px; margin-top: 0.25rem;
   }
   .jump:hover { text-decoration: underline; }
+
+  [hidden] { display: none !important; }
+  .lang a[aria-current="true"] { color: var(--brand); border-color: var(--brand); background: var(--brand-soft); }
 </style>
 </head>
-<body>
+<body data-title-tr="GezPlan Hesap Silme" data-title-en="GezPlan Account Deletion">
 <div class="page">
 
   <header class="top">
     <a class="brand" href="https://conquu.github.io/"><span class="brand-glyph" aria-hidden="true">🧭</span>GezPlan</a>
     <nav class="lang" aria-label="Dil / Language">
-      <a href="#tr" lang="tr">Türkçe</a>
-      <a href="#en" lang="en">English</a>
+      <a href="#tr" lang="tr" data-set="tr">Türkçe</a>
+      <a href="#en" lang="en" data-set="en">English</a>
     </nav>
   </header>
 
   <nav class="docnav" aria-label="GezPlan belgeleri">
-    <a href="index.html">Gizlilik politikası</a>
-    <a href="hesap-silme.html" aria-current="page">Hesap silme</a>
+    <a href="index.html" data-href="index.html" data-tr="Gizlilik politikası" data-en="Privacy policy">Gizlilik politikası</a>
+    <a href="hesap-silme.html" data-href="hesap-silme.html" data-tr="Hesap silme" data-en="Account deletion" aria-current="page">Hesap silme</a>
   </nav>
 
-  <section id="tr" lang="tr">
+  <section data-lang="tr" lang="tr">
     <h1>Hesap silme</h1>
     <p class="lede">GezPlan hesabını ve hesabınla ilişkili verileri istediğin zaman kalıcı olarak silebilirsin.</p>
 
@@ -245,7 +248,7 @@
     <p style="margin-top:1.25rem">Silme işleminden sonra verilerin saklanmaz. Sistem yedeklerinden tamamen kaldırılması en fazla 30 gün sürebilir.</p>
   </section>
 
-  <section id="en" lang="en">
+  <section data-lang="en" lang="en">
     <h1>Account deletion</h1>
     <p class="lede">You can permanently delete your GezPlan account and the data linked to it at any time.</p>
 
@@ -292,5 +295,50 @@
   </footer>
 
 </div>
+
+<script>
+(function () {
+  var sections = document.querySelectorAll("[data-lang]");
+  var langLinks = document.querySelectorAll(".lang a");
+  var docLinks = document.querySelectorAll(".docnav a");
+  var body = document.body;
+
+  function pick() {
+    var h = (location.hash || "").replace("#", "");
+    if (h === "tr" || h === "en") return h;
+    try {
+      var saved = localStorage.getItem("gezplan-lang");
+      if (saved === "tr" || saved === "en") return saved;
+    } catch (e) {}
+    var nav = (navigator.language || "tr").toLowerCase();
+    return nav.indexOf("tr") === 0 ? "tr" : "en";
+  }
+
+  function setLang(l, updateHash) {
+    sections.forEach(function (s) { s.hidden = s.getAttribute("data-lang") !== l; });
+    langLinks.forEach(function (a) {
+      a.setAttribute("aria-current", a.getAttribute("data-set") === l ? "true" : "false");
+    });
+    docLinks.forEach(function (a) {
+      a.textContent = a.getAttribute("data-" + l);
+      a.setAttribute("href", a.getAttribute("data-href") + "#" + l);
+    });
+    document.documentElement.lang = l;
+    var t = body.getAttribute("data-title-" + l);
+    if (t) document.title = t;
+    try { localStorage.setItem("gezplan-lang", l); } catch (e) {}
+    if (updateHash && history.replaceState) history.replaceState(null, "", "#" + l);
+  }
+
+  langLinks.forEach(function (a) {
+    a.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      setLang(a.getAttribute("data-set"), true);
+    });
+  });
+
+  setLang(pick(), false);
+})();
+</script>
 </body>
 </html>
