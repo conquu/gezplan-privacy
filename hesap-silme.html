@@ -227,10 +227,12 @@
     <h2>Hangi veriler silinir</h2>
     <dl class="data">
       <div><dt>Hesap bilgilerin (e-posta, görünen ad)</dt><dd class="gone">Silinir</dd></div>
-      <div><dt>Kurduğun geziler</dt><dd class="gone">Gezi, bütün üyelerin o gezideki kayıtlarıyla birlikte silinir</dd></div>
-      <div><dt>Başkalarının gezilerine eklediğin masraflar ve ödeme kayıtları</dt><dd class="gone">Silinir</dd></div>
+      <div><dt>Kurduğun ve başka üyesi olan geziler</dt><dd>Silinmez; yöneticiliği gezinin en eski üyesine geçer</dd></div>
+      <div><dt>Kurduğun ve tek üyesi sen olan geziler</dt><dd class="gone">İçindeki her şeyle birlikte silinir</dd></div>
+      <div><dt>Ödediğin masraflar ve ödeme kayıtları</dt><dd>Grubun hesabı bozulmasın diye adın ve e-postan olmadan "Ayrılan üye" olarak kalır</dd></div>
       <div><dt>Mesajların, notların, oylamaların ve oyların</dt><dd class="gone">Silinir</dd></div>
-      <div><dt>Yüklediğin fotoğraflar</dt><dd class="gone">Silinir</dd></div>
+      <div><dt>Yüklediğin anı fotoğrafları</dt><dd class="gone">Silinir; dosyalar birkaç saat içinde kalıcı olarak kaldırılır</dd></div>
+      <div><dt>Devredilen gezilere koyduğun kapak fotoğrafı</dt><dd>Gezinin parçası olarak kalır; yeni yönetici değiştirebilir</dd></div>
       <div><dt>Kişisel çanta listen</dt><dd class="gone">Silinir</dd></div>
       <div><dt>Ortak listede üstlendiğin eşyalar</dt><dd>Eşya listede kalır, üstlenen kişi bilgisi kaldırılır</dd></div>
       <div><dt>Gönderdiğin geri bildirimler</dt><dd class="gone">Silinir</dd></div>
@@ -239,8 +241,9 @@
     <div class="warn">
       <strong>Grup gezileri için önemli:</strong>
       <ul>
-        <li>Kurduğun bir gezide başka üyeler varsa, hesabını sildiğinde gezi onlar için de silinir. Silmeden önce üyelere haber vermeni öneririz.</li>
-        <li>Başkalarının gezilerine eklediğin masraflar silindiği için o gezilerdeki borç ve alacak hesabı değişir.</li>
+        <li>Kurduğun bir gezide başka üyeler varsa gezi onlar için devam eder ve yöneticilik gezinin en eski üyesine geçer. Silmeden önce üyelere haber vermeni öneririz.</li>
+        <li>Ödediğin masraflar ve ödemeler kaldığı için gruptaki borç ve alacak hesabı değişmez. Açık bir borcun varsa silmeden önce kapatmanı öneririz.</li>
+        <li>Uygulamanın güncel sürümünde silme onay ekranı, kaç gezinin devredileceğini ve kaç gezinin silineceğini gösterir.</li>
         <li>Başkalarının kurduğu geziler, onlar için devam eder. Sen yalnızca üye listesinden çıkarılırsın.</li>
       </ul>
     </div>
@@ -269,10 +272,12 @@
     <h2>What gets deleted</h2>
     <dl class="data">
       <div><dt>Your account details (email, display name)</dt><dd class="gone">Deleted</dd></div>
-      <div><dt>Trips you created</dt><dd class="gone">The trip is deleted, including every member's records in it</dd></div>
-      <div><dt>Expenses and payment records you added to other people's trips</dt><dd class="gone">Deleted</dd></div>
+      <div><dt>Trips you created that have other members</dt><dd>Not deleted; admin rights pass to the trip's longest-standing member</dd></div>
+      <div><dt>Trips you created where you are the only member</dt><dd class="gone">Deleted with everything in them</dd></div>
+      <div><dt>Expenses you paid and payment records</dt><dd>Kept as "Former member", without your name or email, so the group's balances stay correct</dd></div>
       <div><dt>Your messages, notes, polls and votes</dt><dd class="gone">Deleted</dd></div>
-      <div><dt>Photos you uploaded</dt><dd class="gone">Deleted</dd></div>
+      <div><dt>Memory photos you uploaded</dt><dd class="gone">Deleted; the files are permanently removed within a few hours</dd></div>
+      <div><dt>Cover photos you set on handed-over trips</dt><dd>Kept as part of the trip; the new admin can change them</dd></div>
       <div><dt>Your personal packing list</dt><dd class="gone">Deleted</dd></div>
       <div><dt>Shared list items you claimed</dt><dd>The item stays on the list, your claim is removed</dd></div>
       <div><dt>Feedback you sent</dt><dd class="gone">Deleted</dd></div>
@@ -281,8 +286,9 @@
     <div class="warn">
       <strong>Important for group trips:</strong>
       <ul>
-        <li>If a trip you created has other members, deleting your account deletes the trip for them too. We recommend telling them first.</li>
-        <li>Because expenses you added to other people's trips are deleted, the balances in those trips change.</li>
+        <li>If a trip you created has other members, the trip continues for them and admin rights pass to its longest-standing member. We recommend telling them first.</li>
+        <li>Because your expenses and payments are kept, the group's balances don't change. If you still owe someone, we recommend settling up first.</li>
+        <li>In the latest version of the app, the confirmation screen shows how many trips will be handed over and how many will be deleted.</li>
         <li>Trips created by others continue for them. You are only removed from the member list.</li>
       </ul>
     </div>
